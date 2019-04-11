@@ -1,0 +1,505 @@
+---
+to: circle/config.yml
+---
+
+version: 2.1
+
+orbs:
+  react-native: echobind/react-native@0.1.2
+
+workflows:
+  version: 2
+
+  ##################################################################
+  # The main workflow, run on push to every branch
+  ##################################################################
+  main:
+    jobs:
+      - react-native/node:
+          name: node
+          filters:
+<% if (config.main.filters.branches.only.length || config.main.filters.branches.ignore.length) { -%>
+            branches:
+<% if (config.main.filters.branches.ignore.length) { -%>
+              ignore:
+<% config.main.filters.branches.ignore.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% if (config.main.filters.branches.only.length) { -%>
+              only:
+<% config.main.filters.branches.only.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% } -%>
+<% if (config.main.filters.tags.only.length || config.main.filters.tags.ignore.length) { -%>
+            tags:
+<% if (config.main.filters.tags.ignore.length) { -%>
+              ignore:
+<% config.main.filters.tags.ignore.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) %>
+<% } -%>
+<% if (config.main.filters.tags.only.length) { -%>
+              only:
+<% config.main.filters.tags.only.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% } -%>
+      - react-native/android:
+          name: android
+          requires:
+            - node
+          filters:
+<% if (config.main.filters.branches.only.length || config.main.filters.branches.ignore.length) { -%>
+            branches:
+<% if (config.main.filters.branches.ignore.length) { -%>
+              ignore:
+<% config.main.filters.branches.ignore.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% if (config.main.filters.branches.only.length) { -%>
+              only:
+<% config.main.filters.branches.only.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% } -%>
+<% if (config.main.filters.tags.only.length || config.main.filters.tags.ignore.length) { -%>
+            tags:
+<% if (config.main.filters.tags.ignore.length) { -%>
+              ignore:
+<% config.main.filters.tags.ignore.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) %>
+<% } -%>
+<% if (config.main.filters.tags.only.length) { -%>
+              only:
+<% config.main.filters.tags.only.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% } -%>
+          build:
+            - run:
+                name: fastlane adhoc android
+                working_directory: android
+                command: bundle exec fastlane adhoc distribute:false build_number:${CIRCLE_BUILD_NUM}
+
+      - react-native/ios:
+          name: ios
+          requires:
+            - node
+          filters:
+<% if (config.main.filters.branches.only.length || config.main.filters.branches.ignore.length) { -%>
+            branches:
+<% if (config.main.filters.branches.ignore.length) { -%>
+              ignore:
+<% config.main.filters.branches.ignore.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% if (config.main.filters.branches.only.length) { -%>
+              only:
+<% config.main.filters.branches.only.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% } -%>
+<% if (config.main.filters.tags.only.length || config.main.filters.tags.ignore.length) { -%>
+            tags:
+<% if (config.main.filters.tags.ignore.length) { -%>
+              ignore:
+<% config.main.filters.tags.ignore.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) %>
+<% } -%>
+<% if (config.main.filters.tags.only.length) { -%>
+              only:
+<% config.main.filters.tags.only.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% } -%>
+          build:
+            - run:
+                name: fastlane adhoc ios
+                working_directory: ios
+                command: bundle exec fastlane adhoc distribute:false build_number:${CIRCLE_BUILD_NUM}
+
+  ##################################################################
+  # The alpha workflow, run on push to master
+  # used for internal testing
+  ##################################################################
+  alpha:
+    jobs:
+      - react-native/node:
+          name: node (alpha)
+          filters:
+<% if (config.alpha.filters.branches.only.length || config.alpha.filters.branches.ignore.length) { -%>
+            branches:
+<% if (config.alpha.filters.branches.ignore.length) { -%>
+              ignore:
+<% config.alpha.filters.branches.ignore.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% if (config.alpha.filters.branches.only.length) { -%>
+              only:
+<% config.alpha.filters.branches.only.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% } -%>
+<% if (config.alpha.filters.tags.only.length || config.alpha.filters.tags.ignore.length) { -%>
+            tags:
+<% if (config.alpha.filters.tags.ignore.length) { -%>
+              ignore:
+<% config.alpha.filters.tags.ignore.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) %>
+<% } -%>
+<% if (config.alpha.filters.tags.only.length) { -%>
+              only:
+<% config.alpha.filters.tags.only.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% } -%>
+      - react-native/android:
+          name: android (alpha)
+          requires:
+            - node (alpha)
+          filters:
+<% if (config.alpha.filters.branches.only.length || config.alpha.filters.branches.ignore.length) { -%>
+            branches:
+<% if (config.alpha.filters.branches.ignore.length) { -%>
+              ignore:
+<% config.alpha.filters.branches.ignore.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% if (config.alpha.filters.branches.only.length) { -%>
+              only:
+<% config.alpha.filters.branches.only.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% } -%>
+<% if (config.alpha.filters.tags.only.length || config.alpha.filters.tags.ignore.length) { -%>
+            tags:
+<% if (config.alpha.filters.tags.ignore.length) { -%>
+              ignore:
+<% config.alpha.filters.tags.ignore.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) %>
+<% } -%>
+<% if (config.alpha.filters.tags.only.length) { -%>
+              only:
+<% config.alpha.filters.tags.only.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% } -%>
+          build:
+            - run:
+                name: fastlane adhoc android
+                working_directory: android
+                command: |
+                  APPCENTER_OWNER_NAME="<%= appCenterConfig.teamName %>" \
+                  APPCENTER_APP_NAME="<%= appCenterConfig.androidAppName %>" \
+                  bundle exec fastlane adhoc build_number:${CIRCLE_BUILD_NUM}
+      - react-native/ios:
+          name: ios (alpha)
+          requires:
+            - node (alpha)
+          filters:
+<% if (config.alpha.filters.branches.only.length || config.alpha.filters.branches.ignore.length) { -%>
+            branches:
+<% if (config.alpha.filters.branches.ignore.length) { -%>
+              ignore:
+<% config.alpha.filters.branches.ignore.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% if (config.alpha.filters.branches.only.length) { -%>
+              only:
+<% config.alpha.filters.branches.only.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% } -%>
+<% if (config.alpha.filters.tags.only.length || config.alpha.filters.tags.ignore.length) { -%>
+            tags:
+<% if (config.alpha.filters.tags.ignore.length) { -%>
+              ignore:
+<% config.alpha.filters.tags.ignore.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) %>
+<% } -%>
+<% if (config.alpha.filters.tags.only.length) { -%>
+              only:
+<% config.alpha.filters.tags.only.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% } -%>
+          build:
+            - run:
+                name: fastlane adhoc ios
+                working_directory: ios
+                command: |
+                  APPCENTER_OWNER_NAME="<%= appCenterConfig.teamName %>" \
+                  APPCENTER_APP_NAME="<%= appCenterConfig.iosAppName %>" \
+                  bundle exec fastlane adhoc build_number:${CIRCLE_BUILD_NUM}
+
+  ##################################################################
+  # The beta workflow, run on push to beta
+  # used for beta testing
+  ##################################################################
+  beta:
+    jobs:
+      - react-native/node:
+          name: node (beta)
+          filters:
+<% if (config.beta.filters.branches.only.length || config.beta.filters.branches.ignore.length) { -%>
+            branches:
+<% if (config.beta.filters.branches.ignore.length) { -%>
+              ignore:
+<% config.beta.filters.branches.ignore.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% if (config.beta.filters.branches.only.length) { -%>
+              only:
+<% config.beta.filters.branches.only.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% } -%>
+<% if (config.beta.filters.tags.only.length || config.beta.filters.tags.ignore.length) { -%>
+            tags:
+<% if (config.beta.filters.tags.ignore.length) { -%>
+              ignore:
+<% config.beta.filters.tags.ignore.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) %>
+<% } -%>
+<% if (config.beta.filters.tags.only.length) { -%>
+              only:
+<% config.beta.filters.tags.only.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% } -%>
+      - react-native/android:
+          name: android (beta)
+          environment_prefix: beta
+          requires:
+            - node (beta)
+          filters:
+<% if (config.beta.filters.branches.only.length || config.beta.filters.branches.ignore.length) { -%>
+            branches:
+<% if (config.beta.filters.branches.ignore.length) { -%>
+              ignore:
+<% config.beta.filters.branches.ignore.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% if (config.beta.filters.branches.only.length) { -%>
+              only:
+<% config.beta.filters.branches.only.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% } -%>
+<% if (config.beta.filters.tags.only.length || config.beta.filters.tags.ignore.length) { -%>
+            tags:
+<% if (config.beta.filters.tags.ignore.length) { -%>
+              ignore:
+<% config.beta.filters.tags.ignore.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) %>
+<% } -%>
+<% if (config.beta.filters.tags.only.length) { -%>
+              only:
+<% config.beta.filters.tags.only.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% } -%>
+          build:
+            - run:
+                name: fastlane beta android
+                working_directory: android
+                command: |
+                  bundle exec fastlane beta build_number:${CIRCLE_BUILD_NUM}
+      - react-native/ios:
+          name: ios (beta)
+          environment_prefix: beta
+          requires:
+            - node (beta)
+          filters:
+<% if (config.beta.filters.branches.only.length || config.beta.filters.branches.ignore.length) { -%>
+            branches:
+<% if (config.beta.filters.branches.ignore.length) { -%>
+              ignore:
+<% config.beta.filters.branches.ignore.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% if (config.beta.filters.branches.only.length) { -%>
+              only:
+<% config.beta.filters.branches.only.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% } -%>
+<% if (config.beta.filters.tags.only.length || config.beta.filters.tags.ignore.length) { -%>
+            tags:
+<% if (config.beta.filters.tags.ignore.length) { -%>
+              ignore:
+<% config.beta.filters.tags.ignore.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) %>
+<% } -%>
+<% if (config.beta.filters.tags.only.length) { -%>
+              only:
+<% config.beta.filters.tags.only.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% } -%>
+          build:
+            - run:
+                name: fastlane beta ios
+                working_directory: ios
+                command: |
+                  bundle exec fastlane beta build_number:${CIRCLE_BUILD_NUM}
+
+  ##################################################################
+  # The production workflow, run on push to production
+  # used for App Store / Google Play deploy
+  ##################################################################
+  production:
+    jobs:
+      - react-native/node:
+          name: node (production)
+          environment_prefix: production
+          filters:
+<% if (config.production.filters.branches.only.length || config.production.filters.branches.ignore.length) { -%>
+            branches:
+<% if (config.production.filters.branches.ignore.length) { -%>
+              ignore:
+<% config.production.filters.branches.ignore.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% if (config.production.filters.branches.only.length) { -%>
+              only:
+<% config.production.filters.branches.only.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% } -%>
+<% if (config.production.filters.tags.only.length || config.production.filters.tags.ignore.length) { -%>
+            tags:
+<% if (config.production.filters.tags.ignore.length) { -%>
+              ignore:
+<% config.production.filters.tags.ignore.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) %>
+<% } -%>
+<% if (config.production.filters.tags.only.length) { -%>
+              only:
+<% config.production.filters.tags.only.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% } -%>
+      - react-native/android:
+          name: android (production)
+          environment_prefix: production
+          requires:
+            - node (production)
+          filters:
+<% if (config.production.filters.branches.only.length || config.production.filters.branches.ignore.length) { -%>
+            branches:
+<% if (config.production.filters.branches.ignore.length) { -%>
+              ignore:
+<% config.production.filters.branches.ignore.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% if (config.production.filters.branches.only.length) { -%>
+              only:
+<% config.production.filters.branches.only.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% } -%>
+<% if (config.production.filters.tags.only.length || config.production.filters.tags.ignore.length) { -%>
+            tags:
+<% if (config.production.filters.tags.ignore.length) { -%>
+              ignore:
+<% config.production.filters.tags.ignore.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) %>
+<% } -%>
+<% if (config.production.filters.tags.only.length) { -%>
+              only:
+<% config.production.filters.tags.only.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% } -%>
+          build:
+            - run:
+                name: fastlane production android
+                working_directory: android
+                command: |
+                  bundle exec fastlane production build_number:${CIRCLE_BUILD_NUM}
+      - react-native/ios:
+          name: ios (production)
+          requires:
+            - node (production)
+          filters:
+<% if (config.production.filters.branches.only.length || config.production.filters.branches.ignore.length) { -%>
+            branches:
+<% if (config.production.filters.branches.ignore.length) { -%>
+              ignore:
+<% config.production.filters.branches.ignore.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% if (config.production.filters.branches.only.length) { -%>
+              only:
+<% config.production.filters.branches.only.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% } -%>
+<% if (config.production.filters.tags.only.length || config.production.filters.tags.ignore.length) { -%>
+            tags:
+<% if (config.production.filters.tags.ignore.length) { -%>
+              ignore:
+<% config.production.filters.tags.ignore.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) %>
+<% } -%>
+<% if (config.production.filters.tags.only.length) { -%>
+              only:
+<% config.production.filters.tags.only.forEach((branch) => { -%>
+                - <%= branch %>
+<% }) -%>
+<% } -%>
+<% } -%>
+          build:
+            - run:
+                name: fastlane production ios
+                working_directory: ios
+                command: |
+                  bundle exec fastlane production build_number:${CIRCLE_BUILD_NUM}
