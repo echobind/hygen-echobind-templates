@@ -5,7 +5,7 @@ to: circle/config.yml
 version: 2.1
 
 orbs:
-  react-native: echobind/react-native@0.1.2
+  react-native: echobind/react-native@0.3.0
 
 workflows:
   version: 2
