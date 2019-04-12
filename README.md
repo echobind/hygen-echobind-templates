@@ -21,3 +21,11 @@ Generates a compatible configuration for the [circleci-react-native-orb](https:/
 hygen generator circleci-config
 ```
 ---
+### REACT-NATIVE FASTLANE IOS
+
+Generates a fastlane configuration with 4 lane workflows (main/alpha/beta/production).
+
+```bash
+hygen generator fastlane-ios
+```
+---

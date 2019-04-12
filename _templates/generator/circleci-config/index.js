@@ -59,12 +59,12 @@ const triggerPrompt = workflow => ({
   choices: [
     {
       name: "branches",
-      message: 'Branches',
+      message: "Branches",
       initial: config[workflow].filters.branches.only.join(",").trim()
     },
     {
       name: "tags",
-      message: 'Tags',
+      message: "Tags",
       initial: config[workflow].filters.tags.only.join(",").trim()
     }
   ],
@@ -135,9 +135,9 @@ module.exports = [
       return true;
     },
     choices: [
-      { type: 'input', name: "teamName", message: "Team Name:" },
-      { type: 'input', name: "androidAppName", message: "Android App Name:" },
-      { type: 'input', name: "iosAppName", message: "iOS App Name:" }
+      { type: "input", name: "teamName", message: "Team Name:" },
+      { type: "input", name: "androidAppName", message: "Android App Name:" },
+      { type: "input", name: "iosAppName", message: "iOS App Name:" }
     ]
   },
   triggerPrompt("main"),
