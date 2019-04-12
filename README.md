@@ -12,7 +12,13 @@
 - ```bash
     npm i -g hygen-add
     ```
+3. Install the `hygen-echobind-templates` package with `hygen-add` tool.
+- ```bash
+    hygen-add https://github.com/echobind/hygen-echobind-templates
+- **TODO**: Publish to NPM and/or set package github repo public.
+- When templates are updated in the package, to sync the changes to your local templates, re-run the command above to update your templates folder.
 ---
+
 ### REACT-NATIVE CIRCLECI CONFIG
 
 Generates a compatible configuration for the [circleci-react-native-orb](https://circleci.com/orbs/registry/orb/echobind/react-native).
@@ -23,9 +29,17 @@ hygen generator circleci-config
 ---
 ### REACT-NATIVE FASTLANE IOS
 
-Generates a fastlane configuration with 4 lane workflows (main/alpha/beta/production).
+Generates an iOS fastlane configuration with 4 build/distribution workflows - **main** | **alpha** | **beta** | **production**
 
 ```bash
 hygen generator fastlane-ios
+```
+---
+### REACT-NATIVE FASTLANE ANDROID
+
+Generates an Android fastlane configuration with 4 build/distribution workflows - **main** | **alpha** | **beta** | **production**
+
+```bash
+hygen generator fastlane-android
 ```
 ---
