@@ -2,7 +2,11 @@
 
 ### Installation
 
-1. Ensure `hygen` is installed globally. Follow the [quick start guide](http://www.hygen.io/quick-start).
+1. Ensure `hygen` is installed globally.
+-  ```bash
+    hygen --version
+   ```
+   If command not found follow the [quick start guide](http://www.hygen.io/quick-start).
 
 2. Install the `hygen-add` tool that allows us to install `hygen` **generators** from publicly available packages via **npm** or **github**.
 - ```bash
